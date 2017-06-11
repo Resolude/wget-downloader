@@ -23,5 +23,3 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 
 	episode=$((episode+1))
 done < "$1"
-
-wait
