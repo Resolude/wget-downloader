@@ -6,19 +6,28 @@ read -r name;
 season=1;
 episode=1;
 
+# Create parent and first season directories
 mkdir -p ./"$name"/s1/;
 
+# While the input file has another link
 while IFS='' read -r line || [[ -n "$line" ]]; do
+    # If the input is a blank line, increment season
 	if [[ "$line" == "" ]]; then
 		season=$((season+1))
 		mkdir -p ./"$name"/s"$season"/;
+        # Restart episode counter for new season
 		episode=1
+        # Get another line, nothing more to do
 		continue;
 	fi
 
+    # Complicated grep piping to get the episode number
 	eps_number=$(echo "$line" | grep -o -e '_[0-9]\+\.mp4' | grep -o -e '[0-9]\+.' | grep -o -e '[0-9]\+')
 
+    # Generate the file name with proper season/epsiode labeling e.g. 01, 02, 03
 	filename=$(printf "$name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number")
+    # Get the file, appending non-verbose logging to log.txt, running in background
+    # and specifying the file path
 	wget --no-verbose -a log.txt -b -O ./"$name"/s"$season"/"$filename" "$line"
 
 	episode=$((episode+1))
