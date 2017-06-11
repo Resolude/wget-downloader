@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo -n "Enter series name: ";
-read name;
+read -r name;
 
 season=1;
 episode=1;
@@ -19,7 +19,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	eps_number=$(echo "$line" | grep -o -e '_[0-9]\+\.mp4' | grep -o -e '[0-9]\+.' | grep -o -e '[0-9]\+')
 
 	filename=$(printf "$name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number")
-	wget --no-verbose -a log.txt -b -O "./"$name"/s"$season"/$filename" $line
+	wget --no-verbose -a log.txt -b -O ./"$name"/s"$season"/"$filename" "$line"
 
 	episode=$((episode+1))
 done < "$1"
