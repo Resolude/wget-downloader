@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: download <FILE>"
+USAGE="Usage: download <FILE>";
 
-if [ $# == 0 ] ; then
+if [ $# == 0 ]; then
     echo $USAGE;
     exit 1;
 fi
@@ -24,7 +24,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         mkdir -p ./"$name"/s"$season"/;
         # Restart episode counter for new season
         episode=1;
-        # Get another line, nothing more to do
+        # Get another line from the file, nothing more to do
         continue;
     fi
 
