@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+USAGE="Usage: download <FILE>"
+
+if [ $# == 0 ] ; then
+    echo $USAGE;
+    exit 1;
+fi
+
 echo -n "Enter series name: ";
 read -r name;
 
