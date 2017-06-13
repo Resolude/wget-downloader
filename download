@@ -2,6 +2,7 @@
 
 USAGE="Usage: $(basename $0) <FILE>";
 
+# Need to change this methodology when argument handling changes to accommodate more options
 NUM_ARGS=1;
 
 E_MISSING_ARGS=1;
