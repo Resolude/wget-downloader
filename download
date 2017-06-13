@@ -2,9 +2,23 @@
 
 USAGE="Usage: `basename $0` <FILE>";
 
+E_MISSING_ARGS=1;
+E_MISSING_FILE=2;
+E_EMPTY_FILE=3; 
+
 if [ $# == 0 ]; then
     echo $USAGE;
-    exit 1;
+    exit "$E_MISSING_ARGS";
+fi
+
+if [ ! -s "$1" ]; then
+    if [ ! -f "$1" ]; then
+        echo "Error: Cannot locate file $1.";
+        exit "$E_MISSING_FILE";
+    else
+        echo "Error: File $1 is empty. Nothing to do.";
+        exit "$E_EMPTY_FILE";
+    fi
 fi
 
 echo -n "Enter series name: ";
