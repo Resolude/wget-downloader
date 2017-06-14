@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: $(basename $0) <FILE>";
+USAGE="Usage: $(basename "$0") <FILE>";
 
 # Need to change this methodology when argument handling changes to accommodate more options
 NUM_ARGS=1;
@@ -9,8 +9,10 @@ E_MISSING_ARGS=1;
 E_MISSING_FILE=2;
 E_EMPTY_FILE=3; 
 
+EPS_NUMBER_REGEX="_([0-9]+).mp4$";
+
 if [ $# != "$NUM_ARGS" ]; then
-    echo $USAGE;
+    echo "$USAGE";
     exit "$E_MISSING_ARGS";
 fi
 
@@ -24,8 +26,7 @@ if [ ! -s "$1" ]; then
     fi
 fi
 
-echo -n "Enter series name: ";
-read -r name;
+read -r -p "Enter series name: " name;
 
 season=1;
 episode=1;
@@ -34,7 +35,7 @@ episode=1;
 mkdir -p ./"$name"/s1/;
 
 # While the input file has another link
-while IFS='' read -r line || [[ -n "$line" ]]; do
+while IFS= read -r line || [[ -n "$line" ]]; do
     # If the input is a blank line, increment season
     if [[ "$line" == "" ]]; then
         season=$((season+1));
@@ -45,11 +46,21 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         continue;
     fi
 
-    # Complicated grep piping to get the episode number
-    eps_number=$(echo "$line" | grep -o -e '_[0-9]\+\.mp4' | grep -o -e '[0-9]\+.' | grep -o -e '[0-9]\+');
+    # Bash regex to capture the episode number and assign it to eps_number
+    # If no match, set eps_number to -1 so we know later that we didn't match
+    if [[ "$line" =~ $EPS_NUMBER_REGEX ]]; then
+        eps_number="${BASH_REMATCH[1]}";
+    else
+        eps_number=-1;
+    fi
 
     # Generate the file name with proper season/epsiode labeling e.g. 01, 02, 03
-    filename=$(printf "$name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number");
+    if [ $eps_number -ne -1 ]; then
+        filename=$(printf "$name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number");
+    else
+        # We didn't find an episode number, don't include it in the file name
+        filename=$(printf "$name-s%02de%02d.mp4\n" "$season" "$episode");
+    fi
 
     # Get the file, appending non-verbose logging to log.txt, running in background
     # and specifying the file path
