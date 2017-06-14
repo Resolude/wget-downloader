@@ -9,7 +9,7 @@ E_MISSING_ARGS=1;
 E_MISSING_FILE=2;
 E_EMPTY_FILE=3; 
 
-EPS_NUMBER_REGEX="_([0-9]+).mp4$";
+EPS_NUMBER_REGEX="_([0-9]+)\.mp4$";
 
 if [ $# != "$NUM_ARGS" ]; then
     echo "$USAGE";
