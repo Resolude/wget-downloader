@@ -5,41 +5,66 @@ USAGE="Usage: $(basename "$0") <FILE>";
 # Need to change this methodology when argument handling changes to accommodate more options
 NUM_ARGS=1;
 
+# Need to change when flags can be set to specify start point
+season=1;
+episode=1;
+
+# Error codes
 E_MISSING_ARGS=1;
 E_MISSING_FILE=2;
 E_EMPTY_FILE=3; 
 
+# Regex for capturing the episode number from the URL
 EPS_NUMBER_REGEX="_([0-9]+)\.mp4$";
+# Regex for matching against invalid directory names
+INVALID_DIR_REGEX="/";
 
+# Gets the series name from the user.
+# Fails if an invalid name is used or if the name matches and existing directory.
+get_series_name() {
+    read -r -p "Enter series name: " series_name;
+
+    if [[ "$series_name" =~ $INVALID_DIR_REGEX ]]; then
+        echo "Error: Invalid series name. Remove illegal characters and try again.";
+        get_series_name
+    fi
+
+    if [ -d "$series_name" ]; then
+        echo "Series name matches existing directory. Try again.";
+        get_series_name
+    fi
+}
+
+# If an invalid number of arguments are passed in.
 if [ $# != "$NUM_ARGS" ]; then
     echo "$USAGE";
     exit "$E_MISSING_ARGS";
 fi
 
+# If the input file doesn't exist or is empty
 if [ ! -s "$1" ]; then
+    # If the input file doesn't exist
     if [ ! -f "$1" ]; then
         echo "Error: Cannot locate file $1.";
         exit "$E_MISSING_FILE";
     else
+        # File exists but is empty
         echo "Error: File $1 is empty. Nothing to do.";
         exit "$E_EMPTY_FILE";
     fi
 fi
 
-read -r -p "Enter series name: " name;
-
-season=1;
-episode=1;
+get_series_name
 
 # Create parent and first season directories
-mkdir -p ./"$name"/s1/;
+mkdir -p ./"$series_name"/s1/;
 
-# While the input file has another link
+# While the input file has another URL
 while IFS= read -r line || [[ -n "$line" ]]; do
     # If the input is a blank line, increment season
     if [[ "$line" == "" ]]; then
         season=$((season+1));
-        mkdir -p ./"$name"/s"$season"/;
+        mkdir -p ./"$series_name"/s"$season"/;
         # Restart episode counter for new season
         episode=1;
         # Get another line from the file, nothing more to do
@@ -56,15 +81,15 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
     # Generate the file name with proper season/epsiode labeling e.g. 01, 02, 03
     if [ $eps_number -ne -1 ]; then
-        filename=$(printf "$name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number");
+        filename=$(printf "$series_name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number");
     else
         # We didn't find an episode number, don't include it in the file name
-        filename=$(printf "$name-s%02de%02d.mp4\n" "$season" "$episode");
+        filename=$(printf "$series_name-s%02de%02d.mp4\n" "$season" "$episode");
     fi
 
     # Get the file, appending non-verbose logging to log.txt, running in background
     # and specifying the file path
-    wget --no-verbose -a log.txt -b -O ./"$name"/s"$season"/"$filename" "$line";
+    wget --no-verbose -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line";
 
     episode=$((episode+1));
 done < "$1"
