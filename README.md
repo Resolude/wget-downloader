@@ -16,6 +16,7 @@ Input File Format
 -----------------
 
 The following is an example of an input file used to pass URLs to the concurrent wget processes:
+
     http://example.com/path/to/file/episode_6063.mp4
     http://example.com/path/to/file/episode_6064.mp4
     http://example.com/path/to/file/episode_6065.mp4
