@@ -59,4 +59,4 @@ URLs can also end with _hd.mp4. For example:
 
     http://example.com/path/to/file/episode_6105_hd.mp4
 
-The shows are separated by newlines to denote the beginning of a new season. The episodes must be listed in order and cannot skip episodes. For example, if you have ten episodes in one season, they must be in ascending order from one to ten with no gaps in between. If the start point is not season one, episode one, then an alternate start point can be specified by using arguments as described in the usage section.
+The URLs are separated by blank lines to denote the beginning of a new season. The episodes must be listed in order and cannot skip episodes. For example, if you have ten episodes in one season, they must be in ascending order from one to ten with no missing episodes in between. If the start point is not season one episode one, then an alternate start point can be specified by using arguments as described in the usage section.
