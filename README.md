@@ -1,7 +1,19 @@
 wget-downloader
 ===============
 
-Downloads a show from a specially formatted file containing download URLs using concurrent wget processes in the background.
+Downloads a TV show from a specially formatted file containing download URLs using concurrent wget processes in the background.
+
+Installation
+------------
+
+Download and change directory into the repository using the following command:
+
+    git clone https://github.com/Resolude/wget-downloader.git
+    cd wget-downloader/
+
+Mark the script as executable:
+
+    chmod u+x ./download
 
 Usage
 -----
