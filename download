@@ -2,7 +2,7 @@
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
 
-# Will change if argument is passed to specify alternate start point
+# Variable declarations
 series_name="";
 season=1;
 episode=1;
@@ -43,11 +43,13 @@ get_series_name() {
     fi
 }
 
+# No arguments passed, print usage and fail
 if [[ $# -eq 0 ]]; then
     echo "$USAGE";
     exit "$E_INVALID_ARGS";
 fi
 
+# getopt not available, fail
 getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
     echo "$0: Fatal error. getopt --test failed.";
@@ -104,6 +106,7 @@ while true; do
     esac
 done
 
+# No input file was provided
 if [[ $# -eq 0 ]]; then
     echo "$0: An input file is required.";
     exit "$E_INVALID_ARGS";
@@ -117,13 +120,13 @@ if [[ ! -s "$1" ]]; then
     if [[ ! -f "$1" ]]; then
         echo "$0: Cannot locate file $1.";
         exit "$E_MISSING_FILE";
-    else
-        # File exists but is empty
+    else # File exists but is empty
         echo "$0: File $1 is empty. Nothing to do.";
         exit "$E_EMPTY_FILE";
     fi
 fi
 
+# No name passed via argument, get it via prompt
 if [[ "$series_name" == "" ]]; then
     get_series_name;
 fi
