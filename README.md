@@ -1,7 +1,7 @@
 wget-downloader
 ===============
 
-Downloads a show from a specially formatted file using concurrent wget processes in the background.
+Downloads a show from a specially formatted file containing download URLs using concurrent wget processes in the background.
 
 Usage
 -----
