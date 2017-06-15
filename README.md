@@ -10,7 +10,9 @@ Prerequisite: wget must be installed on the system and locatable within the $PAT
 
     $ which wget
 
-Download and change directory into the repository using the following command:
+If git is installed and in the $PATH, continue on with the remainder of this section. If git is not installed, either install it or copy the script to a file and mark it as executable.
+
+Assuming git is installed, download the repo and change directory into it using the following command:
 
     $ git clone https://github.com/Resolude/wget-downloader.git
     $ cd wget-downloader/
