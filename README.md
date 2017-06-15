@@ -75,7 +75,7 @@ URLs can also end with _hd.mp4. For example:
 
     http://example.com/path/to/file/episode_6105_hd.mp4
 
-Tech-savvy people: A unique number associated with a file (and in no way has to do with the episode number associated with the season/episode of the show) will be captured and used in the wget output so long as the file name matches one of the following two regular expressions:
+Tech-savvy people: A unique number associated with a file (and in no way has to do with the episode number associated with the season/episode of the show) will be captured and used in the wget output file so long as the file name in the URLs input file matches one of the following two regular expressions:
 
     ([0-9]+)\.mp4$
     ([0-9]+)_hd\.mp4$
