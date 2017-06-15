@@ -30,11 +30,11 @@ Options include:
 * -e or --episode: Sets the episode start point for partial downloads. If not set, defaults to 1.
 * -n or --name: Sets the series name. Avoid using spaces and instead use underscores. If not set, program will prompt for a series name automatically.
 
-If you want to cancel the wget downloads, I currently use the following command:
+If you want to cancel the wget downloads, use the following command:
 
     $ kill -9 $(pidof wget)
 
-Keep in mind that this will kill any wget process running on the system under your user, so do not use this command if you have other wget processes running that you do not want to kill.
+**Important:** This will kill any wget process running on the system under your user, so do not use this command if you have other wget processes running that you do not want to kill.
 
 Input File Format
 -----------------
