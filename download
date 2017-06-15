@@ -19,9 +19,9 @@ E_EMPTY_FILE=3;
 E_GETOPT_FAIL=4;
 
 # Regex for capturing the episode number from the URL
-EPS_NUMBER_REGEX="([0-9]+)\.mp4$";
+UNIQ_FILE_NUM_REGEX="([0-9]+)\.mp4$";
 # Regex for capturing the episode number (HD) from the URL
-EPS_NUMBER_HD_REGEX="([0-9]+)_hd\.mp4$";
+UNIQ_FILE_NUM_HD_REGEX="([0-9]+)_hd\.mp4$";
 # Regex for matching against invalid directory names
 INVALID_DIR_REGEX="/";
 # Regex matching line containing only numbers
@@ -146,19 +146,19 @@ while IFS= read -r line || [[ -n "$line" ]]; do
         continue;
     fi
 
-    # Bash regex to capture the episode number and assign it to eps_number
-    # If no match, set eps_number to -1 so we know later that we didn't match
-    if [[ "$line" =~ $EPS_NUMBER_REGEX ]]; then
-        eps_number="${BASH_REMATCH[1]}";
-    elif [[ "$line" =~ $EPS_NUMBER_HD_REGEX ]]; then
-        eps_number="${BASH_REMATCH[1]}";
+    # Bash regex to capture the episode number
+    # If no match, set to -1 so we know later that we didn't match
+    if [[ "$line" =~ $UNIQ_FILE_NUM_REGEX ]]; then
+        uniq_file_num="${BASH_REMATCH[1]}";
+    elif [[ "$line" =~ $UNIQ_FILE_NUM_HD_REGEX ]]; then
+        uniq_file_num="${BASH_REMATCH[1]}";
     else
-        eps_number=-1;
+        uniq_file_num=-1;
     fi
 
     # Generate the file name with proper season/epsiode labeling e.g. 01, 02, 03
-    if [[ $eps_number -ne -1 ]]; then
-        filename=$(printf "$series_name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$eps_number");
+    if [[ $uniq_file_num -ne -1 ]]; then
+        filename=$(printf "$series_name-s%02de%02d_%d.mp4\n" "$season" "$episode" "$uniq_file_num");
     else
         # We didn't find an episode number, don't include it in the file name
         filename=$(printf "$series_name-s%02de%02d.mp4\n" "$season" "$episode");
