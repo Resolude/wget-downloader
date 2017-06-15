@@ -6,19 +6,23 @@ Downloads a TV show from a specially formatted file containing download URLs usi
 Installation
 ------------
 
+Prerequisite: wget must be installed on the system and locatable within the $PATH variable. To verify that the aforementioned is true, run the following command:
+
+    $ which wget
+
 Download and change directory into the repository using the following command:
 
-    git clone https://github.com/Resolude/wget-downloader.git
-    cd wget-downloader/
+    $ git clone https://github.com/Resolude/wget-downloader.git
+    $ cd wget-downloader/
 
 Mark the script as executable:
 
-    chmod u+x ./download
+    $ chmod u+x ./download
 
 Usage
 -----
 
-    ./download [OPTIONS]... FILE
+    $ ./download [OPTIONS]... FILE
 Options include:
 * -s or --season: Sets the season start point for partial downloads. If not set, defaults to 1.
 * -e or --episode: Sets the episode start point for partial downloads. If not set, defaults to 1.
