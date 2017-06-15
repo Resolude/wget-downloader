@@ -19,9 +19,9 @@ E_EMPTY_FILE=3;
 E_GETOPT_FAIL=4;
 
 # Regex for capturing the episode number from the URL
-EPS_NUMBER_REGEX="_([0-9]+)\.mp4$";
+EPS_NUMBER_REGEX="([0-9]+)\.mp4$";
 # Regex for capturing the episode number (HD) from the URL
-EPS_NUMBER_HD_REGEX="_([0-9]+)_hd\.mp4$";
+EPS_NUMBER_HD_REGEX="([0-9]+)_hd\.mp4$";
 # Regex for matching against invalid directory names
 INVALID_DIR_REGEX="/";
 # Regex matching line containing only numbers
