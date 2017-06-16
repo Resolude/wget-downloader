@@ -166,7 +166,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
     # Get the file, appending non-verbose logging to log.txt, running in background
     # and specifying the file path
-    wget --no-verbose -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line";
+    wget -nv -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line";
 
     episode=$((episode+1));
 done < "$1"
