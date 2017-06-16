@@ -83,11 +83,11 @@ URLs can also end with _hd.mp4. For example:
 
     http://example.com/path/to/file/episode_6105_hd.mp4
 
+The URLs are separated by blank lines to denote the beginning of a new season. The episodes must be listed in order and cannot skip episodes. For example, if you have ten episodes in one season, they must be in ascending order from one to ten with no missing episodes in between. If the start point is not season one episode one, then an alternate start point can be specified by using arguments as described in the usage section.
+
 Tech-savvy people: A unique number associated with a file (and in no way has to do with the episode number associated with the season/episode of the show) will be captured and used in the wget output file so long as the file name in the URLs input file matches one of the following two regular expressions:
 
     ([0-9]+)\.mp4$
     ([0-9]+)_hd\.mp4$
 
 If the URL does not match this name, it will not be included in the file name created by wget upon download.
-
-The URLs are separated by blank lines to denote the beginning of a new season. The episodes must be listed in order and cannot skip episodes. For example, if you have ten episodes in one season, they must be in ascending order from one to ten with no missing episodes in between. If the start point is not season one episode one, then an alternate start point can be specified by using arguments as described in the usage section.
