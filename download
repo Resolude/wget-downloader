@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.0.0
+VERSION=1.1.0
 
 # Variable declarations
 series_name="";
