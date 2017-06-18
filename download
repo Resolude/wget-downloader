@@ -17,6 +17,7 @@ E_INVALID_ARGS=1;
 E_MISSING_FILE=2;
 E_EMPTY_FILE=3; 
 E_GETOPT_FAIL=4;
+E_MISS_DEP=5;
 
 # Regex for capturing the episode number from the URL
 UNIQ_FILE_NUM_REGEX="([0-9]+)\.mp4$";
@@ -54,6 +55,12 @@ getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
     echo "$0: Fatal error. getopt --test failed.";
     exit "$E_GETOPT_FAIL";
+fi
+
+# Check if wget is installed
+if ! which wget > /dev/null 2>&1; then
+    echo "$0: Fatal error, missing wget. Please install it and retry.";
+    exit "$E_MISS_DEP";
 fi
 
 if ! PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"); then
