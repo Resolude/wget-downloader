@@ -29,6 +29,7 @@ Options include:
 * -s or --season: Sets the season start point for partial downloads. If not set, defaults to 1.
 * -e or --episode: Sets the episode start point for partial downloads. If not set, defaults to 1.
 * -n or --name: Sets the series name. Avoid using spaces and instead use underscores. If not set, program will prompt for a series name automatically.
+* -v or --version: Prints the version of the script. If this argument is used, the script will terminate after printing the version number.
 
 If you want to cancel the wget downloads, use the following command:
 
