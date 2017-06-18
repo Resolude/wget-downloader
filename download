@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
+VERSION=1.0.0
 
 # Variable declarations
 series_name="";
@@ -8,9 +9,9 @@ season=1;
 episode=1;
 
 # Program arguments (short)
-SHORT=s:e:n:
+SHORT=s:e:n:v
 # Program arguments (long)
-LONG=season:,episode:,name:
+LONG=season:,episode:,name:,version
 
 # Error codes
 E_INVALID_ARGS=1;
@@ -101,6 +102,12 @@ while true; do
             series_name="$2";
 
             shift 2;
+            ;;
+        -v|--version)
+            echo "$VERSION";
+            exit 0;
+
+            shift;
             ;;
         --)
             shift;
