@@ -9,6 +9,7 @@ season=1;
 episode=1;
 
 # Program arguments (short)
+# Single colon indicates mandatory option to argument
 SHORT=s:e:n:v
 # Program arguments (long)
 LONG=season:,episode:,name:,version
