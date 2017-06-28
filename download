@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.1.3
+VERSION=1.1.3;
 
 # Variable declarations
 wget_pids="";
@@ -9,11 +9,11 @@ series_name="";
 season=1;
 episode=1;
 
-# Program arguments (short)
+# Program arguments (short) for getopt
 # Single colon indicates mandatory option to argument
-SHORT=s:e:n:v
-# Program arguments (long)
-LONG=season:,episode:,name:,version
+short=s:e:n:v;
+# Program arguments (long) for getopt
+long=season:,episode:,name:,version;
 
 # Error codes
 E_INVALID_ARGS=1;
@@ -66,12 +66,12 @@ get_series_name() {
 
     if [[ "$val_ret" -eq 1 ]]; then
         echo "Error: Invalid series name. Remove illegal characters and try again.";
-        get_series_name
+        get_series_name;
     fi
 
     if [[ "$val_ret" -eq 2 ]]; then
         echo "Series name matches existing file or directory. Try again.";
-        get_series_name
+        get_series_name;
     fi
 }
 
@@ -94,7 +94,7 @@ if ! which wget > /dev/null 2>&1; then
     exit "$E_MISS_DEP";
 fi
 
-if ! PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"); then
+if ! PARSED=$(getopt --options $short --longoptions $long --name "$0" -- "$@"); then
     # Wrong argument error has been printed to stdout, time to fail
     exit "$E_INVALID_ARGS";
 fi
@@ -230,4 +230,4 @@ done < "$1"
 
 echo "wget PIDs: $wget_pids";
 
-exit 0
+exit 0;
