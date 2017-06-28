@@ -122,7 +122,7 @@ while true; do
             val_ret=$?;
 
             if [[ "$val_ret" -eq 1 ]]; then
-                echo "$0: Invalid series name. Remove illegal characters and try again.";
+                echo "$0: Invalid series name. Remove illegal characters.";
                 exit "$E_INVALID_ARGS";
             fi
 
