@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.1.0
+VERSION=1.1.1
 
 # Variable declarations
 series_name="";
@@ -36,18 +36,32 @@ is_dos_file() {
     [[ $(head -1 "$1") == *$'\r' ]];
 }
 
+validate_series_name() {
+    if [[ "$1" =~ $INVALID_DIR_REGEX ]]; then
+        return 1;
+    fi
+
+    if [[ -e "$1" ]]; then
+        return 2;
+    fi
+
+    return 0;
+}
+
 # Gets the series name from the user.
 # Auto-retry if an invalid name is used or if the name matches and existing directory.
 get_series_name() {
     read -r -p "Enter series name: " series_name;
+    validate_series_name "$series_name";
+    local val_ret=$?;
 
-    if [[ "$series_name" =~ $INVALID_DIR_REGEX ]]; then
+    if [[ "$val_ret" -eq 1 ]]; then
         echo "Error: Invalid series name. Remove illegal characters and try again.";
         get_series_name
     fi
 
-    if [[ -d "$series_name" ]]; then
-        echo "Series name matches existing directory. Try again.";
+    if [[ "$val_ret" -eq 2 ]]; then
+        echo "Series name matches existing file or directory. Try again.";
         get_series_name
     fi
 }
@@ -101,8 +115,16 @@ while true; do
             shift 2;
             ;;
         -n|--name)
-            if [[ "$2" =~ $INVALID_DIR_REGEX ]]; then
-                echo "$0: Invalid character in series name.";
+            validate_series_name "$2";
+            val_ret=$?;
+
+            if [[ "$val_ret" -eq 1 ]]; then
+                echo "$0: Invalid series name. Remove illegal characters and try again.";
+                exit "$E_INVALID_ARGS";
+            fi
+
+            if [[ "$val_ret" -eq 2 ]]; then
+                echo "$0: Series name matches existing file or directory.";
                 exit "$E_INVALID_ARGS";
             fi
 
@@ -151,6 +173,7 @@ fi
 if [[ "$series_name" == "" ]]; then
     get_series_name;
 fi
+
 
 # Create parent and first season directories
 mkdir -p ./"$series_name"/s"$season"/;
