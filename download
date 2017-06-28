@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.1.1
+VERSION=1.1.2
 
 # Variable declarations
 series_name="";
@@ -185,6 +185,8 @@ if is_dos_file "$1"; then
     sed -i 's/\r$//' "$1";
 fi
 
+wget_pids="";
+
 # While the input file has another URL
 while IFS= read -r line || [[ -n "$line" ]]; do
     # If the input is a blank line, increment season
@@ -217,9 +219,11 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
     # Get the file, appending non-verbose logging to log.txt, running in background
     # and specifying the output file path
-    wget -nv -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line";
+    wget_pids="$(wget -nv -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line" | grep -o -E '[0-9]+') $wget_pids";
 
     episode=$((episode+1));
 done < "$1"
+
+echo "wget PIDs: $wget_pids";
 
 exit 0
