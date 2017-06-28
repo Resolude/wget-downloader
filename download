@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.1.2
+VERSION=1.1.3
 
 # Variable declarations
 wget_pids="";
