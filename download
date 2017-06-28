@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: $(basename "$0") [OPTION]... FILE";
-VERSION=1.1.3;
+usage="Usage: $(basename "$0") [OPTION]... FILE";
+version=1.1.3;
 
 # Variable declarations
 wget_pids="";
@@ -16,20 +16,20 @@ short=s:e:n:v;
 long=season:,episode:,name:,version;
 
 # Error codes
-E_INVALID_ARGS=1;
-E_MISSING_FILE=2;
-E_EMPTY_FILE=3; 
-E_GETOPT_FAIL=4;
-E_MISS_DEP=5;
+e_invalid_args=1;
+e_missing_file=2;
+e_empty_file=3; 
+e_getopt_fail=4;
+e_miss_dep=5;
 
 # Regex for capturing the episode number from the URL
-UNIQ_FILE_NUM_REGEX="([0-9]+)\.mp4$";
+uniq_file_num_regex="([0-9]+)\.mp4$";
 # Regex for capturing the episode number (HD) from the URL
-UNIQ_FILE_NUM_HD_REGEX="([0-9]+)_hd\.mp4$";
+uniq_file_num_hd_regex="([0-9]+)_hd\.mp4$";
 # Regex for matching against invalid directory names
-INVALID_DIR_REGEX="/";
+invalid_dir_regex="/";
 # Regex matching line containing only numbers
-NUMERIC_LINE_REGEX="^[0-9]+$";
+numeric_line_regex="^[0-9]+$";
 
 # Print to stderr
 echoerr() {
@@ -46,7 +46,7 @@ is_dos_file() {
 # Return 1 when illegal char
 # Return 2 when file/dir exists matching given series name
 validate_series_name() {
-    if [[ "$1" =~ $INVALID_DIR_REGEX ]]; then
+    if [[ "$1" =~ $invalid_dir_regex ]]; then
         return 1;
     fi
 
@@ -77,26 +77,26 @@ get_series_name() {
 
 # No arguments passed, print usage and fail
 if [[ $# -eq 0 ]]; then
-    echoerr "$USAGE";
-    exit "$E_INVALID_ARGS";
+    echoerr "$usage";
+    exit "$e_invalid_args";
 fi
 
 # getopt not available, fail
 getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
     echoerr "$0: Fatal error. getopt --test failed.";
-    exit "$E_GETOPT_FAIL";
+    exit "$e_getopt_fail";
 fi
 
 # Check if wget is installed
 if ! which wget > /dev/null 2>&1; then
     echoerr "$0: Fatal error, missing wget. Please install it and retry.";
-    exit "$E_MISS_DEP";
+    exit "$e_miss_dep";
 fi
 
 if ! PARSED=$(getopt --options $short --longoptions $long --name "$0" -- "$@"); then
     # Wrong argument error has been printed to stdout, time to fail
-    exit "$E_INVALID_ARGS";
+    exit "$e_invalid_args";
 fi
 
 eval set -- "$PARSED";
@@ -104,9 +104,9 @@ eval set -- "$PARSED";
 while true; do
     case "$1" in
         -s|--season)
-            if [[ ! "$2" =~ $NUMERIC_LINE_REGEX ]]; then
+            if [[ ! "$2" =~ $numeric_line_regex ]]; then
                 echoerr "$0: Invalid season number.";
-                exit "$E_INVALID_ARGS";
+                exit "$e_invalid_args";
             fi
 
             season="$2";
@@ -114,9 +114,9 @@ while true; do
             shift 2;
             ;;
         -e|--episode)
-            if [[ ! "$2" =~ $NUMERIC_LINE_REGEX ]]; then
+            if [[ ! "$2" =~ $numeric_line_regex ]]; then
                 echoerr "$0: Invalid episode number.";
-                exit "$E_INVALID_ARGS";
+                exit "$e_invalid_args";
             fi
 
             episode="$2";
@@ -129,12 +129,12 @@ while true; do
 
             if [[ "$val_ret" -eq 1 ]]; then
                 echoerr "$0: Invalid series name. Remove illegal characters.";
-                exit "$E_INVALID_ARGS";
+                exit "$e_invalid_args";
             fi
 
             if [[ "$val_ret" -eq 2 ]]; then
                 echoerr "$0: Series name matches existing file or directory.";
-                exit "$E_INVALID_ARGS";
+                exit "$e_invalid_args";
             fi
 
             series_name="$2";
@@ -142,7 +142,7 @@ while true; do
             shift 2;
             ;;
         -v|--version)
-            echo "$VERSION";
+            echo "$version";
             exit 0;
 
             shift;
@@ -153,7 +153,7 @@ while true; do
             ;;
         *)
             echoerr "$0: Fatal error while parsing arguments. Report this bug.";
-            exit "$E_INVALID_ARGS";
+            exit "$e_invalid_args";
             ;;
     esac
 done
@@ -161,7 +161,7 @@ done
 # No input file was provided
 if [[ $# -eq 0 ]]; then
     echoerr "$0: An input file is required.";
-    exit "$E_INVALID_ARGS";
+    exit "$e_invalid_args";
 fi
 
 # Validate input file
@@ -171,10 +171,10 @@ if [[ ! -s "$1" ]]; then
     # If the input file doesn't exist
     if [[ ! -f "$1" ]]; then
         echoerr "$0: Cannot locate file $1.";
-        exit "$E_MISSING_FILE";
+        exit "$e_missing_file";
     else # File exists but is empty
         echoerr "$0: File $1 is empty. Nothing to do.";
-        exit "$E_EMPTY_FILE";
+        exit "$e_empty_file";
     fi
 fi
 
@@ -195,7 +195,8 @@ fi
 while IFS= read -r line || [[ -n "$line" ]]; do
     # If the input is a blank line, increment season
     if [[ "$line" == "" ]]; then
-        season=$((season+1));
+        # season=$((season+1));
+        let "season++";
         mkdir -p ./"$series_name"/s"$season"/;
         # Restart episode counter for new season
         episode=1;
@@ -205,9 +206,9 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
     # Bash regex to capture the episode number
     # If no match, set uniq_file_num to -1 so we know later that we didn't match
-    if [[ "$line" =~ $UNIQ_FILE_NUM_REGEX ]]; then
+    if [[ "$line" =~ $uniq_file_num_regex ]]; then
         uniq_file_num="${BASH_REMATCH[1]}";
-    elif [[ "$line" =~ $UNIQ_FILE_NUM_HD_REGEX ]]; then
+    elif [[ "$line" =~ $uniq_file_num_hd_regex ]]; then
         uniq_file_num="${BASH_REMATCH[1]}";
     else
         uniq_file_num=-1;
@@ -225,7 +226,8 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     # and specifying the output file path
     wget_pids="$(wget -nv -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line" | grep -o -E '[0-9]+') $wget_pids";
 
-    episode=$((episode+1));
+    # episode=$((episode+1));
+    let "episode++";
 done < "$1"
 
 echo "wget PIDs: $wget_pids";
