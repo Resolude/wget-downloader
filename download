@@ -31,6 +31,11 @@ INVALID_DIR_REGEX="/";
 # Regex matching line containing only numbers
 NUMERIC_LINE_REGEX="^[0-9]+$";
 
+# Print to stderr
+echoerr() {
+    cat <<< "$@" 1>&2;
+}
+
 # Checks if carriage returns are used by reading the first line of the file
 # passed via argument to the function
 is_dos_file() {
@@ -72,20 +77,20 @@ get_series_name() {
 
 # No arguments passed, print usage and fail
 if [[ $# -eq 0 ]]; then
-    echo "$USAGE";
+    echoerr "$USAGE";
     exit "$E_INVALID_ARGS";
 fi
 
 # getopt not available, fail
 getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
-    echo "$0: Fatal error. getopt --test failed.";
+    echoerr "$0: Fatal error. getopt --test failed.";
     exit "$E_GETOPT_FAIL";
 fi
 
 # Check if wget is installed
 if ! which wget > /dev/null 2>&1; then
-    echo "$0: Fatal error, missing wget. Please install it and retry.";
+    echoerr "$0: Fatal error, missing wget. Please install it and retry.";
     exit "$E_MISS_DEP";
 fi
 
@@ -100,7 +105,7 @@ while true; do
     case "$1" in
         -s|--season)
             if [[ ! "$2" =~ $NUMERIC_LINE_REGEX ]]; then
-                echo "$0: Invalid season number.";
+                echoerr "$0: Invalid season number.";
                 exit "$E_INVALID_ARGS";
             fi
 
@@ -110,7 +115,7 @@ while true; do
             ;;
         -e|--episode)
             if [[ ! "$2" =~ $NUMERIC_LINE_REGEX ]]; then
-                echo "$0: Invalid episode number.";
+                echoerr "$0: Invalid episode number.";
                 exit "$E_INVALID_ARGS";
             fi
 
@@ -123,12 +128,12 @@ while true; do
             val_ret=$?;
 
             if [[ "$val_ret" -eq 1 ]]; then
-                echo "$0: Invalid series name. Remove illegal characters.";
+                echoerr "$0: Invalid series name. Remove illegal characters.";
                 exit "$E_INVALID_ARGS";
             fi
 
             if [[ "$val_ret" -eq 2 ]]; then
-                echo "$0: Series name matches existing file or directory.";
+                echoerr "$0: Series name matches existing file or directory.";
                 exit "$E_INVALID_ARGS";
             fi
 
@@ -147,7 +152,7 @@ while true; do
             break;
             ;;
         *)
-            echo "$0: Fatal error while parsing arguments. Report this bug.";
+            echoerr "$0: Fatal error while parsing arguments. Report this bug.";
             exit "$E_INVALID_ARGS";
             ;;
     esac
@@ -155,7 +160,7 @@ done
 
 # No input file was provided
 if [[ $# -eq 0 ]]; then
-    echo "$0: An input file is required.";
+    echoerr "$0: An input file is required.";
     exit "$E_INVALID_ARGS";
 fi
 
@@ -165,10 +170,10 @@ fi
 if [[ ! -s "$1" ]]; then
     # If the input file doesn't exist
     if [[ ! -f "$1" ]]; then
-        echo "$0: Cannot locate file $1.";
+        echoerr "$0: Cannot locate file $1.";
         exit "$E_MISSING_FILE";
     else # File exists but is empty
-        echo "$0: File $1 is empty. Nothing to do.";
+        echoerr "$0: File $1 is empty. Nothing to do.";
         exit "$E_EMPTY_FILE";
     fi
 fi
