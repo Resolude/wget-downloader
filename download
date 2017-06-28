@@ -36,6 +36,9 @@ is_dos_file() {
     [[ $(head -1 "$1") == *$'\r' ]];
 }
 
+# Validate series name input against existing dir/file or illegal chars
+# Return 1 when illegal char
+# Return 2 when file/dir exists matching given series name
 validate_series_name() {
     if [[ "$1" =~ $INVALID_DIR_REGEX ]]; then
         return 1;
@@ -173,7 +176,6 @@ fi
 if [[ "$series_name" == "" ]]; then
     get_series_name;
 fi
-
 
 # Create parent and first season directories
 mkdir -p ./"$series_name"/s"$season"/;
