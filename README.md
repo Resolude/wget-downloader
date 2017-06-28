@@ -33,7 +33,7 @@ Options include:
 
 If you want to cancel the wget downloads, use the following command:
 
-    $ kill -9 $(pidof wget)
+    $ killall wget 
 
 **NOTE:** This will kill any wget process running on the system under your user, so do not use this command if you have other wget processes running that you do not want to kill.
 
