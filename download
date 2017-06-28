@@ -195,7 +195,6 @@ fi
 while IFS= read -r line || [[ -n "$line" ]]; do
     # If the input is a blank line, increment season
     if [[ "$line" == "" ]]; then
-        # season=$((season+1));
         let "season++";
         mkdir -p ./"$series_name"/s"$season"/;
         # Restart episode counter for new season
@@ -226,7 +225,6 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     # and specifying the output file path
     wget_pids="$(wget -nv -a log.txt -b -O ./"$series_name"/s"$season"/"$filename" "$line" | grep -o -E '[0-9]+') $wget_pids";
 
-    # episode=$((episode+1));
     let "episode++";
 done < "$1"
 
