@@ -33,7 +33,7 @@ NUMERIC_LINE_REGEX="^[0-9]+$";
 
 # Print to stderr
 echoerr() {
-    cat <<< "$@" 1>&2;
+    printf "%s\n" "$*" >&2;
 }
 
 # Checks if carriage returns are used by reading the first line of the file
