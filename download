@@ -4,6 +4,7 @@ USAGE="Usage: $(basename "$0") [OPTION]... FILE";
 VERSION=1.1.2
 
 # Variable declarations
+wget_pids="";
 series_name="";
 season=1;
 episode=1;
@@ -184,8 +185,6 @@ mkdir -p ./"$series_name"/s"$season"/;
 if is_dos_file "$1"; then
     sed -i 's/\r$//' "$1";
 fi
-
-wget_pids="";
 
 # While the input file has another URL
 while IFS= read -r line || [[ -n "$line" ]]; do
