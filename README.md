@@ -92,5 +92,3 @@ Tech-savvy people: A unique number associated with a file (and in no way has to 
     ([0-9]+)_hd\.mp4$
 
 If the URL does not match this name, it will not be included in the file name created by wget upon download.
-
-test
